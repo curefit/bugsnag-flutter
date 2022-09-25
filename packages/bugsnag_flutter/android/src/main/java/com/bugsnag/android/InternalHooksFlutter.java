@@ -14,14 +14,14 @@ import java.util.Map;
 /**
  * Provides access to Bugsnag internals by being part of package com.bugsnag.android
  */
-public class InternalHooks {
+public class InternalHooksFlutter {
     private final Client client;
     private final Logger logger;
     private final ImmutableConfig config;
 
     private final BugsnagMapper modelMapper;
 
-    public InternalHooks(Client client) {
+    public InternalHooksFlutter(Client client) {
         this.client = client;
         this.logger = client.getLogger();
         this.config = client.getConfig();

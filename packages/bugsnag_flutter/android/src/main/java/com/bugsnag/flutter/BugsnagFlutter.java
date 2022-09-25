@@ -17,7 +17,7 @@ import com.bugsnag.android.Configuration;
 import com.bugsnag.android.EndpointConfiguration;
 import com.bugsnag.android.ErrorTypes;
 import com.bugsnag.android.Event;
-import com.bugsnag.android.InternalHooks;
+import com.bugsnag.android.InternalHooksFlutter;
 import com.bugsnag.android.LastRunInfo;
 import com.bugsnag.android.Notifier;
 import com.bugsnag.android.ThreadSendPolicy;
@@ -35,7 +35,7 @@ import java.util.Set;
 
 class BugsnagFlutter {
 
-    private InternalHooks client;
+    private InternalHooksFlutter client;
 
     private static boolean isAnyAttached = false;
     private boolean isAttached = false;
@@ -69,12 +69,12 @@ class BugsnagFlutter {
             return result;
         }
 
-        Client nativeClient = InternalHooks.getClient();
+        Client nativeClient = InternalHooksFlutter.getClient();
         if (nativeClient == null) {
             throw new IllegalStateException("bugsnag.attach() can only be called once the native layer has already been started, have you called Bugsnag.start() from your Android code?");
         }
 
-        client = new InternalHooks(nativeClient);
+        client = new InternalHooksFlutter(nativeClient);
 
         Notifier notifier = client.getNotifier();
         JSONObject notifierJson = args.getJSONObject("notifier");
@@ -99,7 +99,7 @@ class BugsnagFlutter {
             return null;
         }
 
-        if (InternalHooks.getClient() != null) {
+        if (InternalHooksFlutter.getClient() != null) {
             throw new IllegalStateException("bugsnag.start() may not be called after starting Bugsnag natively");
         }
 
@@ -178,7 +178,7 @@ class BugsnagFlutter {
 
         configuration.addFeatureFlags(unpackFeatureFlags(args.optJSONArray("featureFlags")));
 
-        Notifier notifier = InternalHooks.getNotifier(configuration);
+        Notifier notifier = InternalHooksFlutter.getNotifier(configuration);
         JSONObject notifierJson = args.getJSONObject("notifier");
         notifier.setName(notifierJson.getString("name"));
         notifier.setVersion(notifierJson.getString("version"));
@@ -215,7 +215,7 @@ class BugsnagFlutter {
             configuration.setVersionCode(args.getInt("versionCode"));
         }
 
-        client = new InternalHooks(Bugsnag.start(context, configuration));
+        client = new InternalHooksFlutter(Bugsnag.start(context, configuration));
         isAnyStarted = true;
         isStarted = true;
         return null;
